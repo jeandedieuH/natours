@@ -1,12 +1,13 @@
+/* eslint-disable import/extensions */
 import { Router } from 'express';
 import { protect, restrictTo } from '../controllers/authController.js';
-import { 
+import {
   getCheckoutSession,
   getAllBookings,
   createBooking,
   getBooking,
   updateBooking,
-  deleteBooking 
+  deleteBooking,
 } from '../controllers/bookingController.js';
 
 const router = Router();

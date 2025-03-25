@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import mongoose from 'mongoose';
 import Tour from './tourModel.js';
 

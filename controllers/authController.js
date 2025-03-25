@@ -1,4 +1,8 @@
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/extensions */
 /* eslint-disable arrow-body-style */
+
 import crypto from 'crypto';
 import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
@@ -246,5 +250,5 @@ export {
   restrictTo,
   forgetPassword,
   resetPassword,
-  updatePassword
+  updatePassword,
 };

@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import multer from 'multer';
 import sharp from 'sharp';
 import Tour from '../Models/tourModel.js';
@@ -229,5 +230,5 @@ export {
   updateTour,
   deleteTour,
   uploadTourImages,
-  resizeTourImages
+  resizeTourImages,
 };

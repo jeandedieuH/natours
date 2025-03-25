@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import Tour from '../Models/tourModel.js';
 import User from '../Models/userModel.js';
 import AppError from '../utils/appError.js';
@@ -64,10 +65,4 @@ const updateUserData = catchAsync(async (req, res) => {
   });
 });
 
-export {
-  getOverview,
-  getTour,
-  getLoginForm,
-  getAccount,
-  updateUserData
-};
+export { getOverview, getTour, getLoginForm, getAccount, updateUserData };

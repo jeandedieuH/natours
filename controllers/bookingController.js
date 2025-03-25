@@ -1,8 +1,12 @@
+/* eslint-disable import/extensions */
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
 import Tour from '../Models/tourModel.js';
 import Booking from '../Models/bookingModel.js';
 import * as factory from './handlerFactory.js';
-import Stripe from 'stripe';
-import dotenv from 'dotenv';
+
+import { showAlert } from '../public/js/alerts.js';
+import User from '../Models/userModel.js';
 
 // Load environment variables
 dotenv.config();

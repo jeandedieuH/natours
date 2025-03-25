@@ -1,5 +1,8 @@
+/* eslint-disable import/extensions */
+
 import catchAsync from '../utils/catchAsync.js';
 import APIfeatures from '../utils/apiFeatures.js';
+
 import AppError from '../utils/appError.js';
 
 const deleteOne = (Model) =>
@@ -85,10 +88,4 @@ const getAll = (Model) =>
     });
   });
 
-export {
-  deleteOne,
-  updateOne,
-  createOne,
-  getOne,
-  getAll
-};
+export { deleteOne, updateOne, createOne, getOne, getAll };

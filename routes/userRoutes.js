@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+
 import { Router } from 'express';
 
 import {
@@ -17,8 +19,6 @@ import {
   protect,
   resetPassword,
   restrictTo,
-} from '../controllers/authController.js';
-import {
   signup,
   login,
   logout,

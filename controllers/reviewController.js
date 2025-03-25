@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import Review from '../Models/reviewModel.js';
 import * as factory from './handlerFactory.js';
 
@@ -20,5 +21,5 @@ export {
   getReview,
   createReview,
   deleteReview,
-  updateReview
+  updateReview,
 };

@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import multer from 'multer';
 import sharp from 'sharp';
 import User from '../Models/userModel.js';
@@ -120,5 +121,5 @@ export {
   getAllUsers,
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
 };

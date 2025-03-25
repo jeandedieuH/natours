@@ -101,7 +101,10 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 try {
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGO_URI, {
+    tls: true,
+    tlsAllowInvalidCertificates: true,
+  });
   console.log('DB connection successful!');
   const port = process.env.PORT || 5000;
   app.listen(port, () => {
