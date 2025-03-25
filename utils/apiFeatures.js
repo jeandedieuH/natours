@@ -49,4 +49,4 @@ class APIfeatures {
   }
 }
 
-module.exports = APIfeatures;
+export default APIfeatures;

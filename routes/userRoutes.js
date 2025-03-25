@@ -1,37 +1,47 @@
-const express = require('express');
+import { Router } from 'express';
 
-const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
+import {
+  createUser,
+  deleteMe,
+  deleteUser,
+  getAllUsers,
+  getMe,
+  getUser,
+  resizeUserPhoto,
+  updateMe,
+  updateUser,
+  uploadUserPhoto,
+} from '../controllers/userController.js';
+import {
+  forgetPassword,
+  protect,
+  resetPassword,
+  restrictTo,
+} from '../controllers/authController.js';
+import {
+  signup,
+  login,
+  logout,
+  updatePassword,
+} from '../controllers/authController.js';
 
-const router = express.Router();
+const router = Router();
 
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
-router.get('/logout', authController.logout);
-router.post('/forgetPassword', authController.forgetPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+router.post('/signup', signup);
+router.post('/login', login);
+router.get('/logout', logout);
+router.post('/forgetPassword', forgetPassword);
+router.patch('/resetPassword/:token', resetPassword);
 
-router.use(authController.protect);
-router.patch('/updateMyPassword', authController.updatePassword);
+router.use(protect);
+router.patch('/updateMyPassword', updatePassword);
 
-router.get('/me', userController.getMe, userController.getUser);
-router.patch(
-  '/updateMe',
-  userController.uploadUserPhoto,
-  userController.resizeUserPhoto,
-  userController.updateMe
-);
-router.delete('/deleteMe', authController.protect, userController.deleteMe);
+router.get('/me', getMe, getUser);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
+router.delete('/deleteMe', protect, deleteMe);
 
-router.use(authController.restrictTo('admin'));
-router
-  .route('/')
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
-router
-  .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+router.use(restrictTo('admin'));
+router.route('/').get(getAllUsers).post(createUser);
+router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
-module.exports = router;
+export default router;

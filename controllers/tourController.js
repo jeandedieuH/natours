@@ -1,10 +1,10 @@
-const multer = require('multer');
-const sharp = require('sharp');
-const Tour = require('../Models/tourModel');
-const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
+import multer from 'multer';
+import sharp from 'sharp';
+import Tour from '../Models/tourModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
 // const AppError = require('../utils/appError');
-const factory = require('./handlerFactory');
+import * as factory from './handlerFactory.js';
 
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -25,14 +25,14 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadTourImages = upload.fields([
+const uploadTourImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
   { name: 'images', maxCount: 3 },
 ]);
 
 // upload.array('images', 5);
 
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
+const resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
   // 1) Cover image
@@ -57,22 +57,22 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
         .toFile(`public/img/tours/${filename}`);
 
       req.body.images.push(filename);
-    })
+    }),
   );
 
   next();
 });
 
-exports.aliasTopTours = (req, res, next) => {
+const aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
   req.query.fields = 'name,price,ratingsAverage, summary,difficulty';
   next();
 };
 
-exports.getAllTours = factory.getAll(Tour);
+const getAllTours = factory.getAll(Tour);
 
-exports.getTourStats = catchAsync(async (req, res, next) => {
+const getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     { $match: { ratingsAverage: { $gte: 4.5 } } },
     {
@@ -100,12 +100,12 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getTour = factory.getOne(Tour, { path: 'reviews' });
-exports.createTour = factory.createOne(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+const getTour = factory.getOne(Tour, { path: 'reviews' });
+const createTour = factory.createOne(Tour);
+const updateTour = factory.updateOne(Tour);
+const deleteTour = factory.deleteOne(Tour);
 
-exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+const getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
 
   const plan = await Tour.aggregate([
@@ -149,7 +149,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+const getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
@@ -159,8 +159,8 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     next(
       new AppError(
         'Please provide latitude and longitude in the format lat,lng.',
-        400
-      )
+        400,
+      ),
     );
   }
   const tours = await Tour.find({
@@ -176,7 +176,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getDistances = catchAsync(async (req, res, next) => {
+const getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
@@ -186,8 +186,8 @@ exports.getDistances = catchAsync(async (req, res, next) => {
     next(
       new AppError(
         'Please provide latitude and longitude in the format lat,lng.',
-        400
-      )
+        400,
+      ),
     );
   }
 
@@ -216,3 +216,18 @@ exports.getDistances = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export {
+  aliasTopTours,
+  getAllTours,
+  getTourStats,
+  getMonthlyPlan,
+  getToursWithin,
+  getDistances,
+  getTour,
+  createTour,
+  updateTour,
+  deleteTour,
+  uploadTourImages,
+  resizeTourImages
+};

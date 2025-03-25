@@ -1,9 +1,9 @@
-const Tour = require('../Models/tourModel');
-const User = require('../Models/userModel');
-const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
+import Tour from '../Models/tourModel.js';
+import User from '../Models/userModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
 
-exports.getOverview = catchAsync(async (req, res) => {
+const getOverview = catchAsync(async (req, res) => {
   const tours = await Tour.find();
 
   res.status(200).render('overview', {
@@ -12,7 +12,7 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTour = catchAsync(async (req, res, next) => {
+const getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
     fields: 'review rating user',
@@ -26,7 +26,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     .status(200)
     .set(
       'Content-Security-Policy',
-      "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"
+      "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;",
     )
     .render('tour', {
       title: `${tour.name} Tour`,
@@ -34,19 +34,19 @@ exports.getTour = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.getLoginForm = (req, res) => {
+const getLoginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
   });
 };
 
-exports.getAccount = (req, res) => {
+const getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',
   });
 };
 
-exports.updateUserData = catchAsync(async (req, res) => {
+const updateUserData = catchAsync(async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
@@ -56,10 +56,18 @@ exports.updateUserData = catchAsync(async (req, res) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   );
   res.status(200).render('account', {
     title: 'Your account',
     user: updatedUser,
   });
 });
+
+export {
+  getOverview,
+  getTour,
+  getLoginForm,
+  getAccount,
+  updateUserData
+};

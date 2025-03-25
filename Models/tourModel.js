@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-
-const slugify = require('slugify');
-const User = require('./userModel');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
+import User from './userModel.js';
 
 const tourSchema = new mongoose.Schema(
   {
@@ -116,7 +115,7 @@ const tourSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // tourSchema.index({ price: 1 });
@@ -187,4 +186,4 @@ tourSchema.post(/^find/, function (docs, next) {
 
 const Tour = mongoose.model('Tour', tourSchema);
 
-module.exports = Tour;
+export default Tour;

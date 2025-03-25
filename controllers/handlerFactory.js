@@ -1,8 +1,8 @@
-const catchAsync = require('../utils/catchAsync');
-const APIfeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
+import catchAsync from '../utils/catchAsync.js';
+import APIfeatures from '../utils/apiFeatures.js';
+import AppError from '../utils/appError.js';
 
-exports.deleteOne = (Model) =>
+const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
 
@@ -16,7 +16,7 @@ exports.deleteOne = (Model) =>
     });
   });
 
-exports.updateOne = (Model) =>
+const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -35,7 +35,7 @@ exports.updateOne = (Model) =>
     });
   });
 
-exports.createOne = (Model) =>
+const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const newDoc = await Model.create(req.body);
 
@@ -45,7 +45,7 @@ exports.createOne = (Model) =>
     });
   });
 
-exports.getOne = (Model, popOptions) =>
+const getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
@@ -62,7 +62,7 @@ exports.getOne = (Model, popOptions) =>
     });
   });
 
-exports.getAll = (Model) =>
+const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET Reviews on tour (hack)
     let filter = {};
@@ -84,3 +84,11 @@ exports.getAll = (Model) =>
       data: { data: doc },
     });
   });
+
+export {
+  deleteOne,
+  updateOne,
+  createOne,
+  getOne,
+  getAll
+};

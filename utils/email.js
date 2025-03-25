@@ -1,24 +1,29 @@
-const nodemailer = require('nodemailer');
-const pug = require('pug');
+import nodemailer from 'nodemailer';
+import pug from 'pug';
+import { convert } from 'html-to-text';
 
-const { convert } = require('html-to-text');
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = class Email {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Jean de Dieu HAGENIMANA <${process.env.EMAIL_FROM}>`;
+    this.from = `Jean de Dieu <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
-        host: process.env.BREVO_HOST,
-        port: process.env.BREVO_PORT,
+        host: process.env.EMAILIT_HOST,
+        port: process.env.EMAILIT_PORT,
         auth: {
-          user: process.env.BREVO_USERNAME,
-          pass: process.env.BREVO_PASSWORD,
+          user: process.env.EMAILIT_USERNAME,
+          pass: process.env.EMAILIT_PASSWORD,
         },
       });
     }
@@ -40,7 +45,7 @@ module.exports = class Email {
         firstName: this.firstName,
         url: this.url,
         subject,
-      }
+      },
     );
     // 2) Define email options
     const mailOptions = {
@@ -61,7 +66,7 @@ module.exports = class Email {
   async sendPasswordReset() {
     await this.send(
       'passwordReset',
-      'Your password reset token (only valid for 10 min)'
+      'Your password reset token (only valid for 10 min)',
     );
   }
-};
+}

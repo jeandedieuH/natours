@@ -1,9 +1,9 @@
-const multer = require('multer');
-const sharp = require('sharp');
-const User = require('../Models/userModel');
-const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
-const factory = require('./handlerFactory');
+import multer from 'multer';
+import sharp from 'sharp';
+import User from '../Models/userModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
+import * as factory from './handlerFactory.js';
 
 // Without Image processing
 // const multerStorage = multer.diskStorage({
@@ -32,9 +32,9 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadUserPhoto = upload.single('photo');
+const uploadUserPhoto = upload.single('photo');
 // With Image processing
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+const resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -55,19 +55,19 @@ const filteredObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getMe = (req, res, next) => {
+const getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+const updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user posts password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
         'This route is not for password updates. Please use /updateMyPassword',
-        400
-      )
+        400,
+      ),
     );
   }
 
@@ -88,7 +88,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
+const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(204).json({
@@ -97,7 +97,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createUser = (req, res) => {
+const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined/Please use signup instead',
@@ -105,7 +105,20 @@ exports.createUser = (req, res) => {
 };
 
 // Do not update passwords with this
-exports.getAllUsers = factory.getAll(User);
-exports.getUser = factory.getOne(User);
-exports.updateUser = factory.updateOne(User);
-exports.deleteUser = factory.deleteOne(User);
+const getAllUsers = factory.getAll(User);
+const getUser = factory.getOne(User);
+const updateUser = factory.updateOne(User);
+const deleteUser = factory.deleteOne(User);
+
+export {
+  uploadUserPhoto,
+  resizeUserPhoto,
+  getMe,
+  updateMe,
+  deleteMe,
+  createUser,
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser
+};
