@@ -2,7 +2,7 @@
   "name": "natours",
   "version": "1.0.0",
   "description": "Travel with us and you will not regret it.",
-  "main": "./public/dist/bundle.js",
+  "main": "./public/js/bundle.js",
   "type": "module",
   "scripts": {
     "start": "nodemon server.js",
