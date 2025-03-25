@@ -9,6 +9,7 @@ import xssClean from 'xss-clean';
 import hpp from 'hpp';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import compression from 'compression';
 
 import AppError from './utils/appError.js';
 import tourRouter from './routes/tourRoutes.js';
@@ -67,6 +68,23 @@ const limiter = rateLimit({
 app.use(cors());
 app.options('*', cors());
 app.use('/api', limiter);
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  }),
+);
+
+// Compression
+app.use(compression());
 
 // ROUTES
 
